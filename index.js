@@ -1,10 +1,17 @@
+/* eslint-disable no-console */
+
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors());
 
 const configuration = {
   taxChance: 90,
   motChance: 70,
+  verbose: false,
+  port: 8080,
 };
 
 const data = {
@@ -23,9 +30,17 @@ app.get('/api/', (req, res) => {
   }
 
   res.status(200).json(result);
+
+  if (configuration.verbose) {
+    console.log(`Request for ${req.query.reg}, sent ${JSON.stringify(result)}`);
+  }
 });
 
 app.get('*', (req, res) => {
+  if (configuration.verbose) {
+    console.log(`404 Request for ${req.url}`);
+  }
+
   res.status(404).end();
 });
 
@@ -50,4 +65,13 @@ function generateDetails(registrationPlate) {
  */
 const randomValue = (min, max) => Math.random() * (max - min) + min;
 
-app.listen(8080);
+if (process.argv[2]) {
+  if (process.argv[2].toLowerCase() === 'verbose') {
+    configuration.verbose = true;
+  }
+}
+
+if (configuration.verbose) {
+  console.log(`Listening on port ${configuration.port}`);
+}
+app.listen(configuration.port);
