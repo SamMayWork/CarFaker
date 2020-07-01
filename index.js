@@ -2,14 +2,17 @@ const express = require('express');
 
 const app = express();
 
-const data = {
+let data = {
 }
 
 app.get('/api/', (req, res) => {
   let result = undefined;
-  if(data[req.query.reg] == undefined) {
+
+  // If we've seen the reg before, send the previous data
+  // If we've never seen the reg before, make some data, send it, store it
+  if(data[req.query.reg] === undefined) {
     result = generateDetails(req.query.reg);
-    data.reg = result;
+    data[req.query.reg] = result;
   } else {
     result = data[req.query.reg];
   }
