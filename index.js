@@ -3,9 +3,9 @@ const express = require('express');
 const app = express();
 
 const configuration = {
-  taxChance : 90,
-  motChance : 70
-}
+  taxChance: 90,
+  motChance: 70,
+};
 
 const data = {
 };
@@ -34,8 +34,8 @@ app.get('*', (req, res) => {
  * @param {*} registrationPlate
  */
 function generateDetails(registrationPlate) {
-  const tax = randomValue(0, 100) < configuration.taxChance ? true : false;
-  const mot = randomValue(0, 100) < configuration.motChance ? true : false;
+  const tax = randomValue(0, 100) < configuration.taxChance;
+  const mot = randomValue(0, 100) < configuration.motChance;
   return {
     reg: registrationPlate,
     hasTax: tax,
@@ -45,11 +45,9 @@ function generateDetails(registrationPlate) {
 
 /**
  * Generates a random arbitrary value
- * @param {*} min 
- * @param {*} max 
+ * @param {*} min
+ * @param {*} max
  */
-const randomValue = (min, max) => {
-  return Math.random() * (max-min) + min;
-}
+const randomValue = (min, max) => Math.random() * (max - min) + min;
 
 app.listen(8080);
